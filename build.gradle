@@ -10,6 +10,7 @@
 buildscript {
     ext.kotlin_version = '1.1.4-3'
     ext.ktor_version = '0.4.0'
+    ext.http4k_version = '2.31.0'
 
     repositories {
         mavenCentral()
@@ -30,6 +31,14 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
 }
+sourceSets {
+//     main.kotlin.srcDirs += 'src'
+//     test.java.srcDirs += 'test'
+     // these defaults already included:
+      main.kotlin.srcDirs += 'src/main/kotlin'
+      main.java.srcDirs += 'src/main/java'
+}
+
 
 sourceCompatibility = 1.8
 
@@ -38,13 +47,6 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
-}
-sourceSets {
-//     main.kotlin.srcDirs += 'src'
-//     test.java.srcDirs += 'test'
-     // these defaults already included:
-      main.kotlin.srcDirs += 'src/main/kotlin'
-      main.java.srcDirs += 'src/main/java'
 }
 
 // In this section you declare the dependencies for your production and test code
@@ -55,11 +57,15 @@ dependencies {
     compile group: "org.http4k", name: "http4k-core", version: "2.31.0"
     compile group: "org.http4k", name: "http4k-server-jetty", version: "2.31.0"
     compile group: "org.http4k", name: "http4k-client-apache", version: "2.31.0"
+    compile "com.natpryce:hamkrest:1.4.0.0"
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
     // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
     // 'test.useTestNG()' to your build script.
+    testCompile "org.http4k:http4k-client-okhttp:$http4k_version"
+    testCompile "com.natpryce:hamkrest:1.4.0.0"
     testCompile 'junit:junit:4.12'
+    testCompile "org.http4k:http4k-testing-hamkrest:$http4k_version"
 }
 
