@@ -1,0 +1,8 @@
+.gradle
+gradle
+build
+out
+
+# ignore the idea files and rely on gradle/maven
+*.iml
+.idea
