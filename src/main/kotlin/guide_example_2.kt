@@ -14,6 +14,7 @@ import org.http4k.server.asServer
 fun MyMathServer(port: Int): Http4kServer = MyMathsApp().asServer(Jetty(port))
 
 fun MyMathsApp(): HttpHandler = routes(
-"/ping" bind GET to { _: Request -> Response(OK) }
+  "/ping" bind GET to { _: Request -> Response(OK) },
+        "/add" bind GET to { _: Request -> Response(OK) }
 )
 
