@@ -23,6 +23,10 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
                 "/add" bind GET to { request: Request ->
                     val valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
                     Response(OK).body(valuesToAdd.sum().toString())
+                },
+                "/multiply" bind GET to { request: Request ->
+                    val valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
+                    Response(OK).body(valuesToAdd.sum().toString())
                 }
         )
 )
