@@ -27,7 +27,8 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
 
 private fun calculate(calculation:(List<Int>) -> Int ): (Request) -> Response {
     return { request: Request ->
-        val valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
+        var valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
+        if (valuesToAdd.size < 2) { valuesToAdd = listOf(0) }
         Response(OK).body(calculation(valuesToAdd).toString())
     }
 }
