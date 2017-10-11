@@ -39,9 +39,17 @@ class EndToEndTest {
     }
 
     @Test
-    fun `all endpoints are mounted correctly`() {
+    fun `all endpoints are mounted correctly ping`() {
         client(Request(GET, "http://localhost:$port/ping")) shouldMatch hasStatus(OK)
+    }
+
+    @Test
+    fun `all endpoints are mounted correctly add`() {
         client(Request(GET, "http://localhost:$port/add?value=1&value=2")).answerShouldBe(3)
+    }
+
+    @Test
+    fun `all endpoints are mounted correctly multiply`() {
         client(Request(GET, "http://localhost:$port/multiply?value=2&value=4")).answerShouldBe(8)
     }
 }
