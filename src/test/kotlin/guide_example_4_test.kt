@@ -4,11 +4,11 @@ import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.should.shouldMatch
 import guide.example._3_adding_the_second_endpoint.Matchers.answerShouldBe
 import org.http4k.client.OkHttp
+import org.http4k.core.*
 import org.http4k.core.Method.GET
-import org.http4k.core.Request
-import org.http4k.core.Response
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
+import org.http4k.filter.ClientFilters.SetHostFrom
 import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasStatus
 import org.junit.After
@@ -22,6 +22,23 @@ object Matchers {
         this shouldMatch hasStatus(OK).and(hasBody(expected.toString()))
     }
 }
+
+abstract class RecorderCdc {
+    abstract val client: HttpHandler
+
+    @Test
+    fun `records answer`() {
+        Recorder(client).record(123)
+        checkAnswerRecorded()
+    }
+
+    open fun checkAnswerRecorded(): Unit {}
+}
+
+class RealRecorderTest : RecorderCdc() {
+    override val client = SetHostFrom(Uri.of("http://realrecorder")).then(OkHttp())
+}
+
 
 class EndToEndTest {
     private val port = Random().nextInt(1000) + 8000
