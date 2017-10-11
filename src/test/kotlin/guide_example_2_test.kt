@@ -4,6 +4,7 @@ import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.should.shouldMatch
 import guide.example._2_adding_the_first_endpoint.Matchers.answerShouldBe
 import org.http4k.client.OkHttp
+import org.http4k.core.Method
 import org.http4k.core.Method.GET
 import org.http4k.core.Request
 import org.http4k.core.Response
@@ -46,7 +47,7 @@ class EndToEndTest {
 }
 
 class AddFunctionalTest {
-    private val client = MyMathsApp()
+    private val client: (Request) -> Response  = MyMathsApp()
 
     @Test
     fun `adds values together`() {

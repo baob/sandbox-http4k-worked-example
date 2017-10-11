@@ -9,5 +9,4 @@ import org.http4k.server.asServer
 
 fun MyMathServer(port: Int): Http4kServer = { _: Request -> Response(OK) }.asServer(Jetty(port))
 
-
-
+fun MyMathsApp(): (Request) -> Response { return { Response(OK) } }
