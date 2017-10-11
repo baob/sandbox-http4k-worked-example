@@ -26,7 +26,7 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
                 },
                 "/multiply" bind GET to { request: Request ->
                     val valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
-                    Response(OK).body(valuesToAdd.sum().toString())
+                    Response(OK).body(valuesToAdd.fold(1, { a,b-> a*b }).toString())
                 }
         )
 )
