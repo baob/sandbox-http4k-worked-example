@@ -1,16 +1,24 @@
 package guide.example._4_adding_an_external_dependency
 
 import com.natpryce.hamkrest.and
+import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.should.shouldMatch
-import guide.example._3_adding_the_second_endpoint.Matchers.answerShouldBe
+import guide.example._4_adding_an_external_dependency.Matchers.answerShouldBe
 import org.http4k.client.OkHttp
 import org.http4k.core.*
 import org.http4k.core.Method.GET
+import org.http4k.core.Method.POST
+import org.http4k.core.Status.Companion.ACCEPTED
 import org.http4k.core.Status.Companion.BAD_REQUEST
 import org.http4k.core.Status.Companion.OK
 import org.http4k.filter.ClientFilters.SetHostFrom
+import org.http4k.filter.ServerFilters.CatchLensFailure
 import org.http4k.hamkrest.hasBody
 import org.http4k.hamkrest.hasStatus
+import org.http4k.lens.Path
+import org.http4k.lens.int
+import org.http4k.routing.bind
+import org.http4k.routing.routes
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -37,6 +45,28 @@ abstract class RecorderCdc {
 
 class RealRecorderTest : RecorderCdc() {
     override val client = SetHostFrom(Uri.of("http://realrecorder")).then(OkHttp())
+}
+
+class FakeRecorderHttp : HttpHandler {
+    val calls = mutableListOf<Int>()
+
+    private val answer = Path.int().of("answer")
+
+    private val app = CatchLensFailure.then(
+            routes(
+                    "/{answer}" bind POST to { request -> calls.add(answer.extract(request)); Response(ACCEPTED) }
+            )
+    )
+
+    override fun invoke(request: Request): Response = app(request)
+}
+
+class FakeRecorderTest : RecorderCdc() {
+    override val client = FakeRecorderHttp()
+
+    override fun checkAnswerRecorded() {
+        client.calls shouldMatch equalTo(listOf(123))
+    }
 }
 
 
