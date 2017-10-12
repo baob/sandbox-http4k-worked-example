@@ -25,6 +25,10 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
         )
 )
 
+class Recorder(private val client: HttpHandler) {
+    fun record(anything :Any) {}
+}
+
 private fun calculate(calculation:(List<Int>) -> Int ): (Request) -> Response {
     return { request: Request ->
         var valuesToAdd = Query.int().multi.defaulted("value", listOf()).extract(request)
