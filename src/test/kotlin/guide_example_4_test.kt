@@ -1,6 +1,7 @@
 package guide.example._4_adding_an_external_dependency
 
 import com.natpryce.hamkrest.and
+import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.should.shouldMatch
 import guide.example._3_adding_the_second_endpoint.Matchers.answerShouldBe
 import org.http4k.client.OkHttp
@@ -36,10 +37,12 @@ abstract class RecorderCdc {
 }
 
 class RealRecorderTest : RecorderCdc() {
-    override val client = SetHostFrom(Uri.of("http://realrecorder")).then(OkHttp())
+    override val client = RealRecorderHttp()
+
+    override fun checkAnswerRecorded() {
+        client.calls shouldMatch equalTo(listOf(123))
+    }
 }
-
-
 class EndToEndTest {
     private val port = Random().nextInt(1000) + 8000
     private val client = OkHttp()
