@@ -26,7 +26,23 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
 )
 
 class Recorder(private val client: HttpHandler) {
-    fun record(anything :Any) {}
+    fun record(anything :Any) {
+        client.record(anything)
+    }
+}
+
+
+class RealRecorderHttp : HttpHandler {
+    override fun invoke(p1: Request): Response {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun record(anything: Any) {
+        calls[calls.size] = anything
+    }
+
+    var calls: MutableList<Any> = mutableListOf()
+
 }
 
 private fun calculate(calculation:(List<Int>) -> Int ): (Request) -> Response {

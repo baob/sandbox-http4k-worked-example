@@ -43,6 +43,7 @@ class RealRecorderTest : RecorderCdc() {
         client.calls shouldMatch equalTo(listOf(123))
     }
 }
+
 class EndToEndTest {
     private val port = Random().nextInt(1000) + 8000
     private val client = OkHttp()
