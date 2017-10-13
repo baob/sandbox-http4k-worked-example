@@ -26,7 +26,10 @@ fun MyMathsApp(): HttpHandler = ServerFilters.CatchLensFailure.then(
 )
 
 class Recorder(private val client: HttpHandler) {
-    fun record(anything :Any) {}
+    fun record(anything :Any) {
+
+        println("----- ${anything} ------")
+    }
 }
 
 private fun calculate(calculation:(List<Int>) -> Int ): (Request) -> Response {
